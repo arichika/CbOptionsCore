@@ -6,7 +6,6 @@ The **CbOptionsCore** This is a [`ConfigurationBuilder`](https://docs.microsoft.
 | This library depends on the Azure Functions 2.0 runtime beta / azure-webjobs-sdk 3.0.0-beta4 release. |
 
 ## What is pleasing about CbOptionsCore?
----
 
 * **Consistent usage**. Provide a consistent ConfigurationBuilder usage environment for both "asp net core" and "azure functions 2.0".
   * Configuration Binding by Azure portal, setting.json and enviroment value.
@@ -18,7 +17,6 @@ The **CbOptionsCore** This is a [`ConfigurationBuilder`](https://docs.microsoft.
   * Read parameters from *some.* setting.json for Unit Test
 
 ## How to Use / Install
----
 
 The library provides in [NuGet](https://www.nuget.org/packages/CbOptionsCore/) .NET Standard 2.0 targeted for .NET Core 2.0.
 
@@ -28,7 +26,6 @@ Install-Package CbOptionsCore
 Or, Please cloning this repository and refer to this project from Azure Functions' projects in Visual Studio 2017 with .NET Core 2.0 + Azure Functions SDK 2.0.
 
 ## Quick Start
----
 
 You can specify the following as arguments of the trigger methods of Azure Functions.
 Please refer to the included sample project.
@@ -92,6 +89,7 @@ For the following explanation, an example option class is shown.
 ```
 
 ### Development in Visual Studio / local debugging
+
 In development or local debugging. this params provided from `local.setting.json`.
 ```csharp
 {
@@ -177,7 +175,6 @@ Value: true
 
 
 ## See Also 
----
 Authoring a Custom Binding for Azure Functions  
 https://mikhail.io/2017/07/authoring-custom-binding-azure-functions/
 
@@ -186,5 +183,4 @@ https://github.com/Azure/azure-webjobs-sdk-extensions
 
 
 ## License
----
 This library is under the MIT License.
