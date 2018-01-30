@@ -1,0 +1,18 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+        "AzureWebJobsDashboard": "UseDevelopmentStorage=true"
+    },
+
+    "SampleBizLogic": {
+      "MyBizOptions": {
+        "MyBizOptions10": "this is in local.setting.json",
+        "MyBizOptions20": 1,
+        "MyBizOptions30": {
+          "MyBizOptions31": "2018-01-01T00:00:00.0000000+09:00",
+          "MyBizOptions32": true
+        }
+      }
+    }
+}
