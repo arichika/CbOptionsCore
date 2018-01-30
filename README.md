@@ -33,7 +33,9 @@ Or, Please cloning this repository and refer to this project from Azure Function
 You can specify the following as arguments of the trigger methods of Azure Functions.
 Please refer to the included sample project.
 
-```
+You can receive strong typed custom options with arguments of methods called from Functions.
+
+```csharp
     public static class SampleFunction2WithOptions
     {
         [FunctionName("SampleFunction2WithOptions")]
@@ -44,16 +46,34 @@ Please refer to the included sample project.
         {
             //...
 
-            // you can use strong typed custom option class.
-            var (result, methodName) = new SomeFunction(options).SomeMethod();
-
-            //...
-        }
-    }
 ```
-`MyBizOptions` is the strongly typed configuration settings class defined by myself. 
 
+`MyBizOptions` is the strongly typed configuration settings class defined by yourself. 
+
+So, It is easy to reuse business logic modules already developed for the asp net core with options.  
+
+The following parameters can be specified by the `CbOptions` attribute.
+
+```csharp
+[CbOptions(sectionKey: {sectionKey}, settingJsonPath: {settingJsonPath}, optional: {optional}, reloadOnChange: {reloadOnChange})] SomeType options, ...
 ```
+
+**string {sectionKey}**: The key of the configuration section.   
+**string {settingJsonPath}**: Path relative to the base path stored in.  
+**bool {optional}**: Whether the file is optional. Default value is `true`.  
+**bool {reloadOnChange}**: Whether the configuration should be reloaded if the file changes.   Default value is `false`.  
+
+Please check this official [document](https://docs.microsoft.com/ja-jp/dotnet/api/microsoft.extensions.configuration.jsonconfigurationextensions.addjsonfile?view=aspnetcore-2.0#Microsoft_Extensions_Configuration_JsonConfigurationExtensions_AddJsonFile_Microsoft_Extensions_Configuration_IConfigurationBuilder_Microsoft_Extensions_FileProviders_IFileProvider_System_String_System_Boolean_System_Boolean_) for ConfigurationBuilder's extention method.
+
+
+For `ConfigurationBuilder` details, check here.
+[Configure an ASP.NET Core App](
+https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/).
+
+
+For the following explanation, an example option class is shown.
+
+```csharp
     public class MyBizOptions
     {
         public string MyBizOptions10 { get; set; } = string.Empty;
@@ -73,7 +93,7 @@ Please refer to the included sample project.
 
 ### Development in Visual Studio / local debugging
 In development or local debugging. this params provided from `local.setting.json`.
-```
+```csharp
 {
     //...
     "SampleBizLogic": {
@@ -89,26 +109,11 @@ In development or local debugging. this params provided from `local.setting.json
 }
 ```
 
-The following parameters can be specified by the `CbOptions` attribute.
-
-`[CbOptions(sectionKey: {sectionKey}, settingJsonPath: {settingJsonPath}, optional: {optional}, reloadOnChange: {reloadOnChange})] ...`
-
-string {sectionKey}: The key of the configuration section.   
-string {settingJsonPath}: Path relative to the base path stored in.  
-bool {optional}: Whether the file is optional. Default value is `true`.  
-bool {reloadOnChange}: Whether the configuration should be reloaded if the file changes.   Default value is `false`.
-Please check this official [document](https://docs.microsoft.com/ja-jp/dotnet/api/microsoft.extensions.configuration.jsonconfigurationextensions.addjsonfile?view=aspnetcore-2.0#Microsoft_Extensions_Configuration_JsonConfigurationExtensions_AddJsonFile_Microsoft_Extensions_Configuration_IConfigurationBuilder_Microsoft_Extensions_FileProviders_IFileProvider_System_String_System_Boolean_System_Boolean_).
-
-
-For `ConfigurationBuilder` details, check here.
-[Configure an ASP.NET Core App](
-https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/).
-
 ### Unit testing by xUnit
 In the same way, you can specify as follows with xUnit's Fact. 
 The setting file `tests.settings.json` is placed in the Unit test project in this sample and set the param "Copy on build.".
 
-```
+```csharp
     public class SampleFact : UnitTestBase
     {
 
@@ -140,7 +145,7 @@ The setting file `tests.settings.json` is placed in the Unit test project in thi
 This article helpfull for you.
 Working with Azure App Services Application Settings and Connection Strings in ASP.NET Core  https://blogs.msdn.microsoft.com/cjaliaga/2016/08/10/working-with-azure-app-services-application-settings-and-connection-strings-in-asp-net-core/
 
-```
+```csharp
     "SampleBizLogic": {
       "MyBizOptions": {
         "MyBizOptions10": "this is in local.setting.json",
