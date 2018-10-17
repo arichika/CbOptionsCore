@@ -9,6 +9,12 @@ namespace CbOptionsCore
 {
     internal class CbOptionsAttributeBindingProvider : IBindingProvider
     {
+
+        private readonly IServiceProvider _serviceProvider;
+
+        public CbOptionsAttributeBindingProvider(IServiceProvider serviceProvider) =>
+            _serviceProvider = serviceProvider;
+
         public Task<IBinding> TryCreateAsync(BindingProviderContext context)
         {
             if (context == null)
@@ -49,32 +55,28 @@ namespace CbOptionsCore
                 };
             }
 
-            private class CbOptionsValueBinder : ValueBinder
+            private class CbOptionsValueBinder : IValueProvider
             {
-                private readonly ParameterInfo _parameter;
+                private readonly object _parameter;
 
-                public CbOptionsValueBinder(ParameterInfo parameter)
-                    : base(parameter.ParameterType)
+                public CbOptionsValueBinder(object parameter) => _parameter = parameter;
+
+                public Type Type => _parameter.GetType();
+
+                public  Task<object> GetValueAsync()
                 {
-                    _parameter = parameter;
+                    var (sectionKey, optionalSettingJsonPath, optional, reloadOnChange) = GetAttributes();
+
+                    return Task.FromResult(CbOptions.Create(
+                        Type,
+                        new CbOptionsAttribute(
+                            sectionKey,
+                            optionalSettingJsonPath,
+                            optional,
+                            reloadOnChange)));
                 }
 
-#pragma warning disable 1998
-                public override async Task<object> GetValueAsync()
-#pragma warning restore 1998
-                {
-                    var v = GetAttributes();
-
-                    return CbOptions.Create(
-                        _parameter.ParameterType
-                        , new CbOptionsAttribute(
-                            v.sectionKey,
-                            v.optionalSettingJsonPath,
-                            v.optional,
-                            v.reloadOnChange));
-                }
-
-                public override string ToInvokeString()
+                public string ToInvokeString()
                 {
                     var v = GetAttributes();
 
@@ -83,7 +85,10 @@ namespace CbOptionsCore
 
                 private (string sectionKey, string optionalSettingJsonPath, bool optional, bool reloadOnChange) GetAttributes()
                 {
-                    var attribute = _parameter.GetCustomAttribute<CbOptionsAttribute>();
+
+                    var attribute = (CbOptionsAttribute)_parameter;
+
+                    // var attribute = _parameter.GetCustomAttribute<CbOptionsAttribute>();
 
                     var key = attribute?.SectionKey ?? string.Empty;
                     var path = attribute?.SettingJsonPath ?? string.Empty;

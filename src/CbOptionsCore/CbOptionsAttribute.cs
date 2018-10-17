@@ -7,8 +7,8 @@ namespace CbOptionsCore
     /// <summary>
     /// Specifies the usage of CbOptions.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field)]
     [Binding]
+    [AttributeUsage(AttributeTargets.Parameter)]
     public sealed class CbOptionsAttribute : Attribute
     {
         /// <summary>
